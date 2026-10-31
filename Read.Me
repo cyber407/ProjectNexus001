@@ -1,112 +1,29 @@
------ Git fetch adalah printah untuk mengambil resource dari online Repo ke local repo tanpa menganggu folder master 
-      atau main berisi versi stabil dari code code yang bsudah berjalan dengan sangat baik
-    ---- hit fetch akan hanya akan mengunduh perubahan yang sudah di push ke repo omline tanpa membuat code yang sedang
-        di buat di local, tidak akan tercampur atau tertimpa oleh perubahan ini, fetch adalah versi aman dari printah 
-        git pull yang sifatnya langsung menggabungkan. dalam kasus branch baru, fecth akan mengambil branch baru yang ada
-        di online repo Github, dan akan menyembunyikan nya di memori latar belakang (artinya fisik dari masing masing 
-        branch yang di tarik dari online repo oleh fetch masih belum memiliki bentuk fisik di local repo).
+--- konflik pada git bisa berbagai macam hal
+    -- timeline konflik (masalah yang muncul saat mencoba melakukan push ke repo online dan git menolak
+        karna timeline di repo online lebih maju dari repo local), biasanya cara mengatasi hal ini adalah dengan
+        cara melakukan perbaikan biasanaya pull dulu dari repo online ke repo local.
+        -- ada juga dalam beberapa kasus terjadi percabangan timeline
+            skenario ini terjadi karna adanya konflik percabangan waktu, misalnya online repo sudah mencapai commit 2 
+            dan di local repo juga sama timeline nya (sudah ada commit 1 dan 2 persis seperti di online repo) tapi tiba tiba'
+            membuat local repo baru dengan git init dan kemudiam membuat file (anggap saja 5 files) dan di commit, ketika
+            melakukan push ke local repo ini akan menyebabkan error karna timeline nya tentu saja repo local lebih maju,
+            kemudian ingin melakukan pull ini akan di tolak juga karna sejarah commit nya sudah berbeda (karna masalahnya
+            adalah repo local ini sudah melakukan commit A > ini adalah sejarah asing), jika posisi nya sudah seperti ini
+            maka ini sudah menjadi 2 dunia berbeda (Multiverse Timeline), online repo pula garis waktu commit 1 , commit 2
+            sementara local repo garis waktunya adalah commit A , ini tidak akan bisa di satukan
+    
+    --- konflik masalah perbubahan yang bertabrakan (konflik ini terjadi jika ada seseorang dari salah satu anggota team
+        secara bersamaan mengubah baris kode (di local dan di online repo)(atau membuat file dengan nama yang sama) lalu salah 
+        satu team melakukan pull , yang akan ini akan terjadi koflik merge, git akan menunggu keputusan user, apakah menerima
+        perubahan kode yang di buat anggota team (Accpet incoming changes) , atau mempertahankan kode yang dibuat (Accpet curent 
+        change) atau menerima keduanya (Accpet Both changes)).
 
-    ---- git checkout (nama branch) > ini adalah printah untuk memilih branch mana yang akan di ambil dari memori
-         latar belakang , jika dari 100 branch yang sudah di tarik oleh fetch ke latar belakang lalu yang kita ambil
-         hanya 2 branch saja, maka dengan printah ini , git akan membuat bentuk fisik dari ke dua branch itu, sisanya
-         tidak akan terlihat.
-
-Skenario > Jika sewktu waktu misalnya branch yang di kerjakan malah hilang dan di hapus oleh anggota tim lain 
-           namun branch nya masih berada di local repo , maka langkah nya adalah harus di hapus karna itu sudah
-           tidak berguna lagi (ingat, menghapus branch di local syaratnya adalah keluar dulu dari branch itu), barulah
-           jalankan "git branch -d (nama branch di sini)", seinggha folder branch master di local (termasuk yang ada) di
-           di dalamnya masih secara utuh, karna tempat berbeda (branch sama sama berdiri sendiri).
-            (cache kadang masih tertinggal, maka dari itu di sarankan untuk di hapus menggunakan printah
-            "git fetch --prune" untuk membersihkan jejak branch yang sudah tidak aktif lagi di online repo).
-Skenario > jika branch yang di kerjakan ternyata di terima di oleh manager dan branch itu sudah di merge ke folder main
-            di repo online, maka yang harus di lakukan adalah menyesuaikan repo local dengan kondisi repo online dengan
-            melakukan pull (ini akan menyesuaikan semua perubahan di folder utama di local repo), untuk branch yang
-            sudah di merge namun masih di local maka di sarakan untuk di hapus juga (printahnya sama seperti sebelumnya)
-
----- jika -d tidak di terima oleh git saat proses penghapusan branch mana gunakan -D
-
-
-BONUS =>
-Cara Kerja Penghapusan: Lokal vs Online
-Agar tidak tertukar, berikut adalah cara Git memisahkan otoritas penghapusan:
-• Jika ingin hapus di LOKAL saja (Aman & Bersih-bersih):bash
-
-# Anda harus pindah ke branch lain dulu (misal master) baru bisa menghapus branch Fitur
-git checkout master
-git branch -d Fitur
-
-Efeknya: Branch Fitur hilang dari laptop Anda, tapi di website GitHub branch Fitur tetap aman dan utuh.
-
-• Jika ingin hapus di ONLINE GitHub (Menghapus permanen di server):
-Anda harus sengaja menembakkan perintah push dengan parameter delete ke internet:
-git push origin --delete Fitur
-Efeknya: Branch Fitur di website GitHub akan terhapus dan hilang untuk seluruh anggota tim.
-
-Kesimpulan
-Menghapus branch lokal mirip seperti membuang kertas sketsa coretan di meja kamar Anda setelah lukisan aslinya 
-sukses dipajang di galeri seni (GitHub). Sketsa di kamar dibuang agar meja Anda bersih, tanpa memengaruhi lukisan 
-yang sudah aman dipajang di galeri [Model Response].
-
-
-
-KEY fact =>
-    1. membuat barnch baru di online repo, tidak terhitung sebagai commit
-
-        Angka Commit di GitHub Tetap Sama
-
-            Jika di repositori GitHub Anda saat itu tertulis "15 Commits", lalu Anda membuat branch baru bernama Fitur-A lewat 
-            website GitHub, angka tersebut akan tetap tertulis "15 Commits" di branch baru tersebut.
-            GitHub hanya menyalin seluruh isi dan sejarah dari branch asal (misal master) ke branch baru secara instan. 
-            Kedua branch tersebut memiliki histori commit yang kembar persis di titik awal kelahirannya.
-
-        Akun Kontribusi Anda Tidak Bertambah Hijau
-        Membuat branch baru di GitHub tidak akan memicu grafik kontribusi (kotak-kotak hijau) di profil GitHub 
-        Anda bertambah. 
-        Kotak hijau di profil GitHub hanya akan menyala jika Anda melakukan tindakan yang benar-benar menciptakan 
-        sejarah baru, yaitu:
-        • Melakukan Push commit baru dari lokal ke GitHub.
-        • Melakukan Merge (penggabungan) Pull Request.
-
-        Kapan Jumlah Commit di Online Repo Baru Berubah?
-
-        Jumlah commit di branch baru tersebut di GitHub baru akan bertambah HANYA JIKA Anda melakukan salah satu dari 
-        dua hal ini:
-            1. Lewat Lokal: Anda pindah ke branch tersebut di komputer lokal, mengetik kode baru, melakukan git commit 
-            di laptop, lalu melakukan git push ke GitHub.
-            2. Lewat Web GitHub: Anda langsung mengedit file di website GitHub (klik ikon pensil) pada branch tersebut, 
-            lalu menekan tombol "Commit changes" di bagian bawah website.
-
-        Kesimpulan Ringkas
-        Membuat branch baru di online repo (GitHub) hanyalah menyalin cetakan jalur kerja saja. Itu adalah proses 
-        gratisan dari Git yang tidak memodifikasi, menambah, atau merusak sejarah commit yang sudah ada sampai ada kode baru 
-        yang sah dimasukkan ke dalamnya.
-    2. Sisa data (cache) dari hasil git fetch 100 branch tersebut sama sekali TIDAK akan membuat komputer atau 
-    repositori Git Anda menjadi berat :
-
-git fetch Hanya Menarik Teks dan Referensi Ringan
-
-Ketika Anda melakukan git fetch terhadap 100 branch, Git tidak mengunduh 100 replika folder proyek secara utuh.
-• Git hanya mengunduh data teks ringkas berupa riwayat commit, SHA hash (kode unik), dan sebuah file referensi berukuran beberapa byte saja untuk memetakan nama-nama branch tersebut.
-• Total ukuran data untuk melacak 100 branch remote tersebut biasanya bahkan tidak sampai 1 Megabyte.
-
-2. File Fisik Baru Diciptakan Hanya Saat checkout
-
-Data hasil fetch disimpan di dalam folder tersembunyi .git dalam kondisi terkompresi (dipadatkan).
-• Selama Anda tidak melakukan git checkout ke 100 branch tersebut, Git tidak akan pernah membongkar file-file fisik (seperti gambar, kode .js, .html, dll) dari 100 branch tersebut ke dalam folder kerja Anda.
-• Jadi, hardisk dan RAM komputer Anda akan tetap aman dan santai.
-
-Kapan "Sampah" Data itu Muncul dan Bagaimana Git Membersihkannya?
-
-    Satu-satunya momen di mana data tersebut menjadi "tidak berguna" adalah ketika 100 branch di GitHub tersebut sudah dihapus oleh tim Anda, tetapi komputer lokal Anda masih menyimpan daftar namanya (disebut Stale References atau referensi basi).
-    Anda tidak perlu mencari file cache tersebut di Windows Explorer untuk menghapusnya. Git menyediakan perintah otomatis satu baris yang sangat bersih untuk membuang daftar nama branch yang sudah mati di online:
-    bash
-    git fetch --prune
-    Use code with caution.
-    Cara Kerja Perintah Ini:
-    • Perintah ini akan membandingkan daftar branch di lokal Anda dengan GitHub saat ini.
-    • Jika ada branch yang sudah dihapus di GitHub, Git lokal Anda akan langsung menghapus jejak memori (cache) branch remote tersebut secara otomatis dari folder .git Anda.
-    • Meja kerja dan memori komputer Anda pun langsung bersih kembali seketika.
-
-    Kesimpulan
-
-    Anda bebas melakukan git fetch kapan saja tanpa perlu khawatir laptop Anda menjadi lemot. Git adalah sistem yang sangat cerdas; biarkan Git yang bekerja mengelola memorinya di latar belakang, sementara Anda cukup fokus menulis kode dengan tenang.
+MAIN KEY > GIT GOLDEN RULES
+    Agar tidak pernah mengalami masalah timeline berantakan lagi di masa depan, selalu ingat dua aturan sederhana ini:
+        • Aturan 1 (Jika Proyek Sudah Ada di GitHub):
+    Jangan gunakan git init. Langsung gunakan git clone <URL> di folder baru Anda [Model Response]. 
+    Dengan cara ini, laptop Anda akan langsung menyalin sejarah asli (Commit 1 -> Commit 2) sehingga garis waktunya 
+    dijamin lurus sejak awal.
+        • Aturan 2 (Jika Menggunakan Folder Sendiri):
+    Jika terpaksa menggunakan git init, pastikan langkah pertama setelah memberikan alamat remote adalah mengetik 
+    git pull origin master SEBELUM Anda membuat file atau mengetik commit apa pun di laptop Anda. 
