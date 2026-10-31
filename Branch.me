@@ -1,0 +1,54 @@
+---- git branch (nama branch baru) > adalah sebuah printah untuk membuat sebuah percabangan baru di repo
+     local, branch bersifat berdiri sendiri memiliki wikayahnya tersendiri, seingga branch master atau main
+     tidak akan terganggu dengan perubahan
+
+
+skenario > dalam pengembangan sebuah project yang memerlukan kerjasama team (anggap saja project nya)
+          lumayan kompleks, di sinilah branch di butuhkan, para devpeloper dalam pengembangan project
+          memiliki file master masing masing dan jika nanti ada penambahan fitur pada project ini, mereka 
+          harus melakukan branching (pengakaran) yang memang kompleks branch, struktur branch
+
+          Master ====> branch utama (sifatnya default)
+          Hotfixes ===> di branch ini isinya biasanya hanya perbaikan yang memang sifatnya tidak membuat suatu
+                        fitur yang panjang.
+          develop ====> ini adalah branch tempat pengemangan fitur di lakukan
+          relase branchs ===> di sinilah semua branch fitur (yang ada di branch develop) akan di merge
+
+          fitur branch ===> fitur fitur yang memang terbilang kompleks dan tidak bisa di selesaikan
+                            di dalam branch develop akan di lanjutkan di sini, setelah fitunya siap
+                            barulah di merge ke develop.
+
+    SKENARIO >
+    Idealnya team branching : 
+        --- dalam branch master di sana sudah terdapat resource utama (ini adalah area yang memang sudah
+            sesuai dengan repo yang online) 
+        --- kemudian rencana penambahan fitur di buat, dari sini dari master maka akan di branch ke
+            dalam develop untuk area pengembangan khusus yang akan kompleks dan panjang, 
+        --- ternyata fitur fitur yang di kembangkan di area branch develop masih membutuhkan branch khusus
+            karna pembuatan fitur yang kompleks, dari sini akan di branch lagi ke branch baru yang namanya
+            fitur branch.
+        --- dari fitur branch inilah dasar paling dalam sebuah percabangan yang idealnya terjadi, setelah
+            fitur fitur ini selesai di buat , lalu di merge(gabungkan) lagi ke branch develop (di sana akan di lakukan
+            testing dan pengujian fitur yang sudah di buat) > kalo di develop ternyata pengembangan nya sudah selesai maka dari 
+            develop ini akan di merge lagi ke branch namanya relase branchs (area perilisan update), barulah kemudian kembali 
+            ke master dari master kemudian kembali ke acuan utama sampai melakukan push ke repo online.
+
+    lalu bagaimana dengan branch Hotfixes ? hotfixes digunakan jika ada perbaikan atau pembuatan fitur yang tidak kompleks
+    dan lebih ke memperbaiki, setelah perbaikan fitur nya barulah dari Hotfixes akan di turunkan kembali ke depelop untuk
+    di testing lagi setelah hasilnya sudah bagus maka kembalikan lagi ke branch release
+
+    bagaimana team tau urutan relase fiturnya ? > biasanya akan di tandai dengan tag khusus (misalnya v1 , v2 dan seterusnya..)
+    sesuai dengan acuan aturan prusahaan atau rules team (bisa berbeda beda tergantung ketentuan)
+
+Ada berbagai macam workflow git namun idealnya biasanya seperti ini
+
+MAIN KEY ==>
+    jadi di lession ini akan ada 4 command yang krusial di local repo
+        - git branch (nama branch) > untuk membuat branch baru (jika di tulis git branch saja maka akan memunculkan daftar list
+          brach apa saja yang ada di local).
+        - git checkout (nama branch) > untuk berpindah pindah dari branch 1 ke branch lain.
+        - git merge > untuk menggabungkan branch satu dengan yang lain
+        - git tag > untuk menandai (melakukan tagging) milstone , biasanya menandari versi (v1, v2 dst...)
+
+WARNING > selalu perhatikan status U pada files sebelum menjalankan skema branching , hati hati kesalahan ini
+            yang akan terisolasi hanya file yang berstatus A, M dan sudah tercommit.
